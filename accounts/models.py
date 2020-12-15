@@ -2,9 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# class User_type_connection(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', unique=True, blank=False, null=False)
-#     user_type = 
+class AccountType(models.Model):
+    account_type = [
+        ('user', 'User'),
+        ('ambulanceHub', 'Ambulance Hub'),
+        ('ambulance', 'Ambulance'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User', blank=False, null=False, primary_key=True)
+    type = models.CharField(verbose_name='Account Type', choices=account_type, default='user', blank=False, null=False, max_length=20)
 
 
 class Users(models.Model):
@@ -16,7 +21,7 @@ class Users(models.Model):
         verbose_name_plural = 'Users'
 
 
-class Ambulance_hub(models.Model):
+class AmbulanceHub(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
     address = models.CharField('Address', max_length=100, blank=True, null=True)
     location = models.CharField('Location', max_length=50, blank=False, null=False)
@@ -29,5 +34,5 @@ class Ambulance_hub(models.Model):
 class Ambulance(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
     ambulance_no = models.CharField('Ambulance Number', max_length=30, unique=True)
-    hub = models.ForeignKey(Ambulance_hub, on_delete=models.CASCADE)
+    hub = models.ForeignKey(AmbulanceHub, on_delete=models.CASCADE)
     available = models.BooleanField('Available')
