@@ -20,12 +20,12 @@ class Users(models.Model):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
-    def save(self, user: User, *args, **kwargs):
-        AccountType.objects.create(user=user, type='user')
+    def save(self, *args, **kwargs):
+        AccountType.objects.create(user=self.user, type='user')
         super(Users, self).save(*args, **kwargs)
         
-    def __str__():
-        return user.username
+    def __str__(self):
+        return self.user.username
 
 
 class AmbulanceHub(models.Model):
@@ -37,9 +37,12 @@ class AmbulanceHub(models.Model):
     class Meta:
         verbose_name = 'Ambulance Hub'
         verbose_name_plural = 'Ambulance Hubs'
+
+    def __str__(self):
+        return self.user.username
     
-    def save(self, user: User, *args, **kwargs):
-        AccountType.objects.create(user=user, type='ambulance_hub')
+    def save(self, *args, **kwargs):
+        AccountType.objects.create(user=self.user, type='ambulance_hub')
         super(AmbulanceHub, self).save(*args, **kwargs)
 
 
@@ -49,6 +52,9 @@ class Ambulance(models.Model):
     hub = models.ForeignKey(AmbulanceHub, on_delete=models.CASCADE)
     available = models.BooleanField('Available')
 
-    def save(self, user: User, *args, **kwargs):
-        AccountType.objects.create(user=user, type='ambulance')
+    def __str__(self):
+        return self.ambulance_no
+
+    def save(self, *args, **kwargs):
+        AccountType.objects.create(user=self.user, type='ambulance')
         super(Ambulance, self).save(*args, **kwargs)
