@@ -1,5 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
+
+
+class Token(models.Model):
+    purpose_type = [
+        ('user_activation', 'User Activation'),
+        ('password_reset', 'Password Reset'),
+    ]
+    token = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
+    purpose = models.CharField(verbose_name='Purpose', choices=purpose_type, blank=False, null=False, max_length=30)
+    
+    def __str__(self):
+        return str(self.token)
 
 
 class AccountType(models.Model):
@@ -10,6 +24,9 @@ class AccountType(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User', blank=False, null=False, primary_key=True)
     type = models.CharField(verbose_name='Account Type', choices=account_type, default='user', blank=False, null=False, max_length=20)
+
+    def __str__(self):
+        return self.user.username + ' --> ' + self.type
 
 
 class Users(models.Model):

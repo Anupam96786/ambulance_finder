@@ -34,6 +34,10 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+DJOSER = {
+    'LOGIN_FIELD': 'email'
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
