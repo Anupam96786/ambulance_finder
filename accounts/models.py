@@ -6,6 +6,7 @@ import uuid
 class Token(models.Model):
     purpose_type = [
         ('user_activation', 'User Activation'),
+        ('hub_activation', 'Hub Activation'),
         ('password_reset', 'Password Reset'),
     ]
     token = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
