@@ -39,7 +39,8 @@ class Users(models.Model):
         verbose_name_plural = 'Users'
 
     def save(self, *args, **kwargs):
-        AccountType.objects.create(user=self.user, type='user')
+        if not AccountType.objects.filter(user=self.user):
+            AccountType.objects.create(user=self.user, type='user')
         super(Users, self).save(*args, **kwargs)
         
     def __str__(self):
@@ -50,7 +51,7 @@ class AmbulanceHub(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
     name = models.CharField(verbose_name='Hub Name', max_length=30, blank=False, null=False)    # Ambulance hub name to be displayed in user panel
     address = models.CharField('Address', max_length=100, blank=True, null=True)
-    location = models.PointField('Location')
+    location = models.PointField('Location', blank=False, null=False)
 
     class Meta:
         verbose_name = 'Ambulance Hub'
@@ -60,7 +61,8 @@ class AmbulanceHub(models.Model):
         return self.user.username
     
     def save(self, *args, **kwargs):
-        AccountType.objects.create(user=self.user, type='ambulance_hub')
+        if not AccountType.objects.filter(user=self.user):
+            AccountType.objects.create(user=self.user, type='ambulance_hub')
         super(AmbulanceHub, self).save(*args, **kwargs)
 
 
@@ -74,5 +76,6 @@ class Ambulance(models.Model):
         return self.ambulance_no
 
     def save(self, *args, **kwargs):
-        AccountType.objects.create(user=self.user, type='ambulance')
+        if not AccountType.objects.filter(user=self.user):
+            AccountType.objects.create(user=self.user, type='ambulance')
         super(Ambulance, self).save(*args, **kwargs)
