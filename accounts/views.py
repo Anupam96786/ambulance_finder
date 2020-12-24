@@ -88,7 +88,7 @@ class CreateAmbulanceHub(APIView):
             admin_mail = list(list(zip(*list(User.objects.filter(is_superuser=True, is_staff=True).values_list('email'))))[0])
             EmailMessage(mail_subject, mail_body, to=admin_mail).send()
             mail_subject = 'Registration successful'
-            mail_body = 'Hi {},\nWe have received your request. We will verify tour deatils and activate your account. You will get another email when your request will be accepted.'.format(request.data['username'])
+            mail_body = 'Hi {},\nWe have received your request. We will verify your deatils and activate your account. You will get another email when your request will be accepted.'.format(request.data['username'])
             EmailMessage(mail_subject, mail_body, to=[request.data['email']]).send()
             return Response(data={'detail': 'Ambulance Hub created successfully. After confirmation from admins you can login to your account.'}, status=status.HTTP_201_CREATED)
 

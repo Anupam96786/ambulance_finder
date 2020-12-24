@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 import uuid
 
@@ -50,7 +50,7 @@ class AmbulanceHub(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
     name = models.CharField(verbose_name='Hub Name', max_length=30, blank=False, null=False)    # Ambulance hub name to be displayed in user panel
     address = models.CharField('Address', max_length=100, blank=True, null=True)
-    location = models.CharField('Location', max_length=50, blank=False, null=False)
+    location = models.PointField('Location')
 
     class Meta:
         verbose_name = 'Ambulance Hub'
