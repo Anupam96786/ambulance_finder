@@ -42,6 +42,10 @@ class Users(models.Model):
         if not AccountType.objects.filter(user=self.user):
             AccountType.objects.create(user=self.user, type='user')
         super(Users, self).save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        AccountType.objects.get(user=self.user).delete()
+        super(Users, self).delete(*args, **kwargs)
         
     def __str__(self):
         return self.user.username
@@ -56,14 +60,18 @@ class AmbulanceHub(models.Model):
     class Meta:
         verbose_name = 'Ambulance Hub'
         verbose_name_plural = 'Ambulance Hubs'
-
-    def __str__(self):
-        return self.user.username
     
     def save(self, *args, **kwargs):
         if not AccountType.objects.filter(user=self.user):
             AccountType.objects.create(user=self.user, type='ambulance_hub')
         super(AmbulanceHub, self).save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        AccountType.objects.get(user=self.user).delete()
+        super(AmbulanceHub, self).delete(*args, **kwargs)
+    
+    def __str__(self):
+        return self.user.username
 
 
 class Ambulance(models.Model):
@@ -71,11 +79,15 @@ class Ambulance(models.Model):
     ambulance_no = models.CharField('Ambulance Number', max_length=30, unique=True, blank=False, null=False)
     hub = models.ForeignKey(AmbulanceHub, on_delete=models.CASCADE)
     available = models.BooleanField('Available')
-
-    def __str__(self):
-        return self.ambulance_no
-
+    
     def save(self, *args, **kwargs):
         if not AccountType.objects.filter(user=self.user):
             AccountType.objects.create(user=self.user, type='ambulance')
         super(Ambulance, self).save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        AccountType.objects.get(user=self.user).delete()
+        super(Ambulance, self).delete(*args, **kwargs)
+    
+    def __str__(self):
+        return self.ambulance_no
