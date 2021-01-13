@@ -7,6 +7,7 @@ from .models import Users, AmbulanceHub, Ambulance, Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from rest_framework import permissions
+from django.contrib.gis.geos import Point
 
 
 class AllowSuperuser(permissions.BasePermission):
@@ -69,7 +70,8 @@ class CreateAmbulanceHub(APIView):
             email
             address (user home address(char type field))
             name (Ambulance Hub name)
-            location (location in map, format --> lat,long))
+            lat
+            long
     '''
     def post(self, request):
         if User.objects.filter(email=request.data['email']):
@@ -80,7 +82,7 @@ class CreateAmbulanceHub(APIView):
             user = User.objects.create_user(username=request.data['username'], password=request.data['password'], email=request.data['email'])
             user.is_active = False
             user.save()
-            AmbulanceHub.objects.create(user=user, name=request.data['name'], address=request.data['address'], location=request.data['location'])
+            AmbulanceHub.objects.create(user=user, name=request.data['name'], address=request.data['address'], location=Point(request.data['long'], request.data['lat'], srid=4326))
             token = Token.objects.create(user=user, purpose='hub_activation').token
             domain = get_current_site(request).domain
             mail_subject = 'Ambulance hub request'
@@ -112,3 +114,7 @@ class AmbulanceHubActivation(APIView):
                 return Response(data={'detail': 'Hub activated successfully'}, status=status.HTTP_200_OK)
         except:
             return Response(data={'detail': 'Link is not valid'}, status=status.HTTP_404_NOT_FOUND)
+
+
+# class CreateAmbulance(APIView):
+
